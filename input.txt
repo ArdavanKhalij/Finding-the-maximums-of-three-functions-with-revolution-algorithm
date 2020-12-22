@@ -20,3 +20,5 @@ numberOfPopulation:
 100
 tournomentPopulation:
 10
+MatingPercentage:
+10
