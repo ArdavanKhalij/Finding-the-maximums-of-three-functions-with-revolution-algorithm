@@ -15,8 +15,7 @@ def NSum(list, n):
 ################################################### First function ####################################################
 def FirstFunction(n, x):
     result = 10*n
-    for i in range(1, n+1):
-        print(i)
+    for i in range(0, n):
         result = result + (x[i]*x[i])-10*math.cos(2*3.14159265359*x[i])
     return result
 ################################################### First function ####################################################
@@ -24,7 +23,7 @@ def FirstFunction(n, x):
 def SecondFunction(a, b, c, d, x):
     sigma1 = 0
     sigma2 = 0
-    for i in range(1, d+1):
+    for i in range(0, d):
         sigma1 = sigma1 + (x[i]*x[i])
         sigma2 = sigma2 + math.cos(c*x[i])
     result = (-1*a*math.exp(-1*b*math.sqrt((1/d)*sigma1))) - (math.exp((1/d)*sigma2)) + a + math.exp(1)
@@ -43,16 +42,28 @@ def ThirdFunction(n, x):
 ################################################### Third function ####################################################
 ###################################################### Get input ######################################################
 with open('input.txt', 'r') as f:
+    f.readline()
     n1 = int(f.readline())
+    f.readline()
     a = float(f.readline())
+    f.readline()
     b =float(f.readline())
+    f.readline()
     c = float(f.readline())
+    f.readline()
     d = int(f.readline())
+    f.readline()
     n3 = int(f.readline())
+    f.readline()
     numberOfGenerations = int(f.readline())
+    f.readline()
     StartFrom = float(f.readline())
+    f.readline()
     Until = float(f.readline())
+    f.readline()
     numberOfPopulation = int(f.readline())
+    f.readline()
+    tournomentPopulation = int(f.readline())
 f.close()
 ###################################################### Get input ######################################################
 ############################## Make the random primary population for the first function ##############################
@@ -234,4 +245,34 @@ def SUS3(population):
                 q.append(population[j])
                 break
     return q
-################################# Stochastic universal sampling for the third function#################################
+################################ Stochastic universal sampling for the third function #################################
+################################## Tournoment sampling method for the first function ##################################
+def TournomentSM1(population):
+    result = []
+    for i in range(0, len(population)):
+        draw = random.choices(population, k=tournomentPopulation)
+        k = Fitness1(draw)
+        k2 = max(k)
+        result.append(draw[k.index(k2)])
+    return result
+################################## Tournoment sampling method for the first function ##################################
+################################# Tournoment sampling method for the second function ##################################
+def TournomentSM2(population):
+    result = []
+    for i in range(0, len(population)):
+        draw = random.choices(population, k=tournomentPopulation)
+        k = Fitness2(draw)
+        k2 = max(k)
+        result.append(draw[k.index(k2)])
+    return result
+################################# Tournoment sampling method for the second function ##################################
+################################## Tournoment sampling method for the third function ##################################
+def TournomentSM3(population):
+    result = []
+    for i in range(0, len(population)):
+        draw = random.choices(population, k=tournomentPopulation)
+        k = Fitness3(draw)
+        k2 = max(k)
+        result.append(draw[k.index(k2)])
+    return result
+################################## Tournoment sampling method for the third function ##################################
