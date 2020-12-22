@@ -64,6 +64,8 @@ with open('input.txt', 'r') as f:
     numberOfPopulation = int(f.readline())
     f.readline()
     tournomentPopulation = int(f.readline())
+    f.readline()
+    MatingPercentage = int(f.readline())
 f.close()
 ###################################################### Get input ######################################################
 ############################## Make the random primary population for the first function ##############################
@@ -276,3 +278,20 @@ def TournomentSM3(population):
         result.append(draw[k.index(k2)])
     return result
 ################################## Tournoment sampling method for the third function ##################################
+######################################################## Mating #######################################################
+def Mating(population):
+    i = 0
+    children = []
+    while(i<len(population)):
+        percent = np.random.uniform(0.0, 100.0)
+        if(percent<=MatingPercentage):
+            for j in range(0, len(population[i])):
+                population[i][j] = (population[i][j] + population[i+1][j])/2
+            children.append(population[i])
+            children.append(population[i])
+        else:
+            children.append(population[i])
+            children.append(population[i+1])
+        i = i + 2
+    return children
+######################################################## Mating #######################################################
