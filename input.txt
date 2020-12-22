@@ -13,8 +13,10 @@ n3:
 numberOfGenerations:
 100
 StartFrom:
-0
+-10
 Until:
-100
+10
 numberOfPopulation:
-20
+100
+tournomentPopulation:
+10
