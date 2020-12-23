@@ -22,3 +22,9 @@ tournomentPopulation:
 10
 MatingPercentage:
 10
+C of 1/5 rule:
+0.9
+Sigma:
+0.5
+SigmaForSelfCorrection:
+1
