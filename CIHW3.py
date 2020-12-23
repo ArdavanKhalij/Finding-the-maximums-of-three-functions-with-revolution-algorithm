@@ -78,22 +78,9 @@ with open('input.txt', 'r') as f:
     COf5Rule = float(f.readline())
     f.readline()
     Sigma = float(f.readline())
+    f.readline()
+    SigmaForSelfCorrection = float(f.readline())
 f.close()
-print(n1)
-print(a)
-print(b)
-print(c)
-print(d)
-print(n3)
-print(numberOfGenerations)
-print(StartFrom)
-print(Until)
-print(numberOfPopulation)
-print(tournomentPopulation)
-print(MatingPercentage)
-print(COf5Rule)
-print(Sigma)
-print("---------------------------------")
 ###################################################### Get input ######################################################
 ############################## Make the random primary population for the first function ##############################
 PrimaryPopulation1 = []
@@ -116,6 +103,27 @@ for i in range(0, numberOfPopulation):
     for j in range(0, n3):
         PrimaryPopulation3[i].append(random.uniform(StartFrom, Until))
 ############################## Make the random primary population for the third function ##############################
+################################ Make the random primary Sigma for the first function #################################
+SigmaPopulation1 = []
+for i in range(0, numberOfPopulation):
+    SigmaPopulation1.append([])
+    for j in range(0, n1):
+        SigmaPopulation1[i].append(random.gauss(0, SigmaForSelfCorrection))
+################################ Make the random primary Sigma for the first function #################################
+############################### Make the random primary Sigma for the second function #################################
+SigmaPopulation2 = []
+for i in range(0, numberOfPopulation):
+    SigmaPopulation2.append([])
+    for j in range(0, d):
+        SigmaPopulation2[i].append(random.gauss(0, SigmaForSelfCorrection))
+############################### Make the random primary Sigma for the second function #################################
+################################ Make the random primary Sigma for the third function #################################
+SigmaPopulation3 = []
+for i in range(0, numberOfPopulation):
+    SigmaPopulation3.append([])
+    for j in range(0, n3):
+        SigmaPopulation3[i].append(random.gauss(0, SigmaForSelfCorrection))
+################################ Make the random primary Sigma for the third function #################################
 ############################################### Fitness of fist function ##############################################
 def Fitness1(population):
     fitnessArray = []
@@ -332,7 +340,6 @@ def SigmaChanger1():
         Sigma = Sigma * COf5Rule
     else:
         Sigma = Sigma
-    print(Sigma)
 ################################################### Sigma changer 1 ###################################################
 ################################################### Sigma changer 2 ###################################################
 def SigmaChanger2():
@@ -344,7 +351,6 @@ def SigmaChanger2():
         Sigma = Sigma * COf5Rule
     else:
         Sigma = Sigma
-    print(Sigma)
 ################################################### Sigma changer 2 ###################################################
 ################################################### Sigma changer 3 ###################################################
 def SigmaChanger3():
@@ -356,7 +362,6 @@ def SigmaChanger3():
         Sigma = Sigma * COf5Rule
     else:
         Sigma = Sigma
-    print(Sigma)
 ################################################### Sigma changer 3 ###################################################
 ############################################ Mutation 1/5 for first function ##########################################
 def OneFivthSigmaMutation1(population):
@@ -375,8 +380,6 @@ def OneFivthSigmaMutation1(population):
             counter11 = counter11 + 1
         counter21 = counter21 + 1
     SigmaChanger1()
-    print(counter11)
-    print(counter21)
     return MP
 ############################################ Mutation 1/5 for first function ##########################################
 ########################################### Mutation 1/5 for second function ##########################################
@@ -418,14 +421,57 @@ def OneFivthSigmaMutation3(population):
     return MP
 ############################################ Mutation 1/5 for third function ##########################################
 #################################### Self correction mutation for the first function ##################################
-def SelfCorrectionMutation1():
-    print("Not finished")
+def SelfCorrectionMutation1(population):
+    global SigmaPopulation1
+    SigmaPopulation = OneFivthSigmaMutation1(SigmaPopulation1)
+    for i in range(0, len(SigmaPopulation)):
+        for j in range(0, len(SigmaPopulation[i])):
+            SigmaPopulation1[i][j] = SigmaPopulation[i][j]
+    MP = []
+    for i in range(0, len(population)):
+        MP.append([])
+        for j in range(0, len(population[i])):
+            MP[i].append(population[i][j])
+    for i in range(0, len(population)):
+        for j in range(0, len(population[i])):
+            MP[i][j] = SigmaPopulation1[i][j] + population[i][j]
+    return MP
 #################################### Self correction mutation for the first function ##################################
 ################################### Self correction mutation for the second function ##################################
-def SelfCorrectionMutation2():
-    print("Not finished")
+def SelfCorrectionMutation2(population):
+    global SigmaPopulation2
+    SigmaPopulation = OneFivthSigmaMutation1(SigmaPopulation2)
+    for i in range(0, len(SigmaPopulation)):
+        for j in range(0, len(SigmaPopulation[i])):
+            SigmaPopulation2[i][j] = SigmaPopulation[i][j]
+    MP = []
+    for i in range(0, len(population)):
+        MP.append([])
+        for j in range(0, len(population[i])):
+            MP[i].append(population[i][j])
+    for i in range(0, len(population)):
+        for j in range(0, len(population[i])):
+            MP[i][j] = SigmaPopulation2[i][j] + population[i][j]
+    return MP
 ################################### Self correction mutation for the second function ##################################
 #################################### Self correction mutation for the third function ##################################
-def SelfCorrectionMutation3():
-    print("Not finished")
+def SelfCorrectionMutation3(population):
+    global SigmaPopulation3
+    SigmaPopulation = OneFivthSigmaMutation1(SigmaPopulation3)
+    for i in range(0, len(SigmaPopulation)):
+        for j in range(0, len(SigmaPopulation[i])):
+            SigmaPopulation3[i][j] = SigmaPopulation[i][j]
+    MP = []
+    for i in range(0, len(population)):
+        MP.append([])
+        for j in range(0, len(population[i])):
+            MP[i].append(population[i][j])
+    for i in range(0, len(population)):
+        for j in range(0, len(population[i])):
+            MP[i][j] = SigmaPopulation3[i][j] + population[i][j]
+    return MP
 #################################### Self correction mutation for the third function ##################################
+####################################################### Main loop #####################################################
+for i in range(0, numberOfGenerations):
+    print("Not Compeleted")
+####################################################### Main loop #####################################################
