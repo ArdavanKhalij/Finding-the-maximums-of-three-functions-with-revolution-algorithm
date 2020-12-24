@@ -3,16 +3,11 @@ import math
 import random
 from numpy.random import choice
 import numpy as np
+import copy
+import statistics
+from matplotlib import pyplot as plt
 import time
 ##################################################### Libraries #######################################################
-#################################################### Constances #######################################################
-counter11 = 0
-counter21 = 0
-counter12 = 0
-counter22 = 0
-counter13 = 0
-counter23 = 0
-#################################################### Constances #######################################################
 ############################################### Sum of first n indexes ################################################
 def NSum(list, n):
     sum=0
@@ -128,21 +123,24 @@ for i in range(0, numberOfPopulation):
 def Fitness1(population):
     fitnessArray = []
     for i in range(0, len(population)):
-        fitnessArray.append((1/FirstFunction(n1, population[i]))*1000)
+        fitnessArray.append(10/(FirstFunction(n1, population[i])+1))
     return fitnessArray
 ############################################### Fitness of fist function ##############################################
 ############################################## Fitness of second function #############################################
 def Fitness2(population):
     fitnessArray = []
     for i in range(0, len(population)):
-        fitnessArray.append((1/SecondFunction(a, b, c, d, population[i]))*1000)
+        fitnessArray.append(10/(SecondFunction(a, b, c, d, population[i])+1))
     return fitnessArray
 ############################################## Fitness of second function #############################################
 ############################################## Fitness of third function ##############################################
 def Fitness3(population):
     fitnessArray = []
     for i in range(0, len(population)):
-        fitnessArray.append((1/ThirdFunction(n3, population[i]))*1000)
+        if ThirdFunction(n3, population[i]) >= 0:
+            fitnessArray.append(10/(ThirdFunction(n3, population[i]))+1)
+        else:
+            fitnessArray.append((ThirdFunction(n3, population[i])))
     return fitnessArray
 ############################################## Fitness of third function ##############################################
 ########################################## Roulette wheel for first function ##########################################
@@ -320,118 +318,97 @@ def Mating(population):
     while(i<len(population)):
         percent = np.random.uniform(0.0, 100.0)
         if(percent<=MatingPercentage):
-            for j in range(0, len(population[i])):
+            k = random.randint(0, len(population[i])-1)
+            for j in range(k, len(population[i])):
                 population[i][j] = (population[i][j] + population[i+1][j])/2
+                population[i + 1][j] = (population[i][j] + population[i + 1][j]) / 2
             children.append(population[i])
-            children.append(population[i])
+            children.append(population[i+1])
         else:
             children.append(population[i])
             children.append(population[i+1])
         i = i + 2
     return children
 ######################################################## Mating #######################################################
-################################################### Sigma changer 1 ###################################################
-def SigmaChanger1():
+#################################################### Sigma changer ####################################################
+def SigmaChanger(counter11, counter21):
     result = counter11 / counter21
     global Sigma
     if result > 1/5:
-        Sigma = Sigma / COf5Rule
+        if ((Sigma / COf5Rule) > 2*StartFrom) and ((Sigma / COf5Rule) < 2*Until):
+            Sigma = Sigma / COf5Rule
     elif result < 1/5:
-        Sigma = Sigma * COf5Rule
+        if ((Sigma * COf5Rule) > 2*StartFrom) and ((Sigma * COf5Rule) < 2*Until):
+            Sigma = Sigma * COf5Rule
     else:
         Sigma = Sigma
-################################################### Sigma changer 1 ###################################################
-################################################### Sigma changer 2 ###################################################
-def SigmaChanger2():
-    result = counter12 / counter22
-    global Sigma
-    if result > 1 / 5:
-        Sigma = Sigma / COf5Rule
-    elif result < 1 / 5:
-        Sigma = Sigma * COf5Rule
-    else:
-        Sigma = Sigma
-################################################### Sigma changer 2 ###################################################
-################################################### Sigma changer 3 ###################################################
-def SigmaChanger3():
-    result = counter13 / counter23
-    global Sigma
-    if result > 1 / 5:
-        Sigma = Sigma / COf5Rule
-    elif result < 1 / 5:
-        Sigma = Sigma * COf5Rule
-    else:
-        Sigma = Sigma
-################################################### Sigma changer 3 ###################################################
+#################################################### Sigma changer ####################################################
 ############################################ Mutation 1/5 for first function ##########################################
 def OneFivthSigmaMutation1(population):
-    MP = []
+    MP = copy.deepcopy(population)
     global Sigma
-    for i in range(0, len(population)):
-        MP.append([])
-        for j in range(0, len(population[i])):
-            MP[i].append(population[i][j])
-    global counter11
-    global counter21
+    counter11 = 0
+    counter21 = 0
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            MP[i][j] = population[i][j] + random.gauss(0, Sigma)
+            k = random.gauss(0, Sigma)
+            if ((MP[i][j] + k) <= Until) and ((MP[i][j] + k) >= StartFrom):
+                MP[i][j] = MP[i][j] + k
         if (Fitness1([MP[i]]))[0]>(Fitness1([population[i]]))[0]:
             counter11 = counter11 + 1
+        else:
+            for h in range(0, n1):
+                MP[i][h] = population[i][h]
         counter21 = counter21 + 1
-    SigmaChanger1()
+    SigmaChanger(counter11, counter21)
     return MP
 ############################################ Mutation 1/5 for first function ##########################################
 ########################################### Mutation 1/5 for second function ##########################################
 def OneFivthSigmaMutation2(population):
-    MP = []
+    MP = copy.deepcopy(population)
     global Sigma
-    for i in range(0, len(population)):
-        MP.append([])
-        for j in range(0, len(population[i])):
-            MP[i].append(population[i][j])
-    global counter12
-    global counter22
+    counter12 = 0
+    counter22 = 0
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            MP[i][j] = population[i][j] + random.gauss(0, Sigma)
+            k = random.gauss(0, Sigma)
+            if ((MP[i][j] + k) <= Until) and ((MP[i][j] + k) >= StartFrom):
+                MP[i][j] = MP[i][j] + k
         if (Fitness2([MP[i]]))[0] > (Fitness2([population[i]]))[0]:
             counter12 = counter12 + 1
+        else:
+            for h in range(0, d):
+                MP[i][h] = population[i][h]
         counter22 = counter22 + 1
-    SigmaChanger2()
+    SigmaChanger(counter12, counter22)
     return MP
 ########################################### Mutation 1/5 for second function ##########################################
 ############################################ Mutation 1/5 for third function ##########################################
 def OneFivthSigmaMutation3(population):
-    MP = []
+    MP = copy.deepcopy(population)
     global Sigma
-    for i in range(0, len(population)):
-        MP.append([])
-        for j in range(0, len(population[i])):
-            MP[i].append(population[i][j])
-    global counter13
-    global counter23
+    counter13 = 0
+    counter23 = 0
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            MP[i][j] = population[i][j] + random.gauss(0, Sigma)
+            k = random.gauss(0, Sigma)
+            if ((MP[i][j] + k) <= Until) and ((MP[i][j] + k) >= StartFrom):
+                MP[i][j] = MP[i][j] + k
         if (Fitness3([MP[i]]))[0] > (Fitness3([population[i]]))[0]:
             counter13 = counter13 + 1
+        else:
+            for h in range(0, n3):
+                MP[i][h] = population[i][h]
         counter23 = counter23 + 1
-    SigmaChanger3()
+    SigmaChanger(counter13, counter23)
     return MP
 ############################################ Mutation 1/5 for third function ##########################################
 #################################### Self correction mutation for the first function ##################################
 def SelfCorrectionMutation1(population):
     global SigmaPopulation1
     SigmaPopulation = OneFivthSigmaMutation1(SigmaPopulation1)
-    for i in range(0, len(SigmaPopulation)):
-        for j in range(0, len(SigmaPopulation[i])):
-            SigmaPopulation1[i][j] = SigmaPopulation[i][j]
-    MP = []
-    for i in range(0, len(population)):
-        MP.append([])
-        for j in range(0, len(population[i])):
-            MP[i].append(population[i][j])
+    SigmaPopulation1 = copy.deepcopy(SigmaPopulation)
+    MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
             MP[i][j] = SigmaPopulation1[i][j] + population[i][j]
@@ -440,15 +417,9 @@ def SelfCorrectionMutation1(population):
 ################################### Self correction mutation for the second function ##################################
 def SelfCorrectionMutation2(population):
     global SigmaPopulation2
-    SigmaPopulation = OneFivthSigmaMutation1(SigmaPopulation2)
-    for i in range(0, len(SigmaPopulation)):
-        for j in range(0, len(SigmaPopulation[i])):
-            SigmaPopulation2[i][j] = SigmaPopulation[i][j]
-    MP = []
-    for i in range(0, len(population)):
-        MP.append([])
-        for j in range(0, len(population[i])):
-            MP[i].append(population[i][j])
+    SigmaPopulation = OneFivthSigmaMutation2(SigmaPopulation2)
+    SigmaPopulation2 = copy.deepcopy(SigmaPopulation)
+    MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
             MP[i][j] = SigmaPopulation2[i][j] + population[i][j]
@@ -457,21 +428,32 @@ def SelfCorrectionMutation2(population):
 #################################### Self correction mutation for the third function ##################################
 def SelfCorrectionMutation3(population):
     global SigmaPopulation3
-    SigmaPopulation = OneFivthSigmaMutation1(SigmaPopulation3)
-    for i in range(0, len(SigmaPopulation)):
-        for j in range(0, len(SigmaPopulation[i])):
-            SigmaPopulation3[i][j] = SigmaPopulation[i][j]
-    MP = []
-    for i in range(0, len(population)):
-        MP.append([])
-        for j in range(0, len(population[i])):
-            MP[i].append(population[i][j])
+    SigmaPopulation = OneFivthSigmaMutation3(SigmaPopulation3)
+    SigmaPopulation3 = copy.deepcopy(SigmaPopulation)
+    MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
             MP[i][j] = SigmaPopulation3[i][j] + population[i][j]
     return MP
 #################################### Self correction mutation for the third function ##################################
 ####################################################### Main loop #####################################################
+MAX1 = []
+AVG1 = []
 for i in range(0, numberOfGenerations):
-    print("Not Compeleted")
+    Parents11 = RouletteWheel3(PrimaryPopulation3)
+    Children11 = Mating(Parents11)
+    Muted = OneFivthSigmaMutation3(Children11)
+    choosingNextGeneration = RouletteWheel3(Muted)
+    PrimaryPopulation3 = copy.deepcopy(choosingNextGeneration)
+    k = Fitness3(PrimaryPopulation3)
+    kk = k.index((max(Fitness3(PrimaryPopulation3))))
+    print(PrimaryPopulation3[kk])
+    print(max(k))
+    MAX1.append(max(k))
+    AVG1.append(statistics.mean(k))
+    print(Sigma)
+    print("----------------------------------------")
 ####################################################### Main loop #####################################################
+plt.plot(AVG1)
+plt.plot(MAX1)
+plt.show()
