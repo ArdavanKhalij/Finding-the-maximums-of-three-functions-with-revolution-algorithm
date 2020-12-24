@@ -138,9 +138,7 @@ def Fitness3(population):
     fitnessArray = []
     for i in range(0, len(population)):
         if ThirdFunction(n3, population[i]) >= 0:
-            fitnessArray.append(10/(ThirdFunction(n3, population[i]))+1)
-        else:
-            fitnessArray.append((ThirdFunction(n3, population[i])))
+            fitnessArray.append(10/(ThirdFunction(n3, population[i])+1))
     return fitnessArray
 ############################################## Fitness of third function ##############################################
 ########################################## Roulette wheel for first function ##########################################
