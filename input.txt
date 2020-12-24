@@ -1,15 +1,15 @@
 n1:
-10
+3
 a:
-10
+1
 b:
-11
+1
 c:
-12
+1
 d:
-10
+7
 n3:
-10
+2
 numberOfGenerations:
 100
 StartFrom:
@@ -19,11 +19,11 @@ Until:
 numberOfPopulation:
 100
 tournomentPopulation:
-10
+200
 MatingPercentage:
 10
 C of 1/5 rule:
-0.9
+0.82
 Sigma:
 0.5
 SigmaForSelfCorrection:
