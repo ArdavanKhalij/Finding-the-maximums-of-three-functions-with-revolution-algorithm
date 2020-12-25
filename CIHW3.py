@@ -103,21 +103,21 @@ SigmaPopulation1 = []
 for i in range(0, numberOfPopulation):
     SigmaPopulation1.append([])
     for j in range(0, n1):
-        SigmaPopulation1[i].append(random.gauss(0, SigmaForSelfCorrection))
+        SigmaPopulation1[i].append(random.uniform(0.001, SigmaForSelfCorrection))
 ################################ Make the random primary Sigma for the first function #################################
 ############################### Make the random primary Sigma for the second function #################################
 SigmaPopulation2 = []
 for i in range(0, numberOfPopulation):
     SigmaPopulation2.append([])
     for j in range(0, d):
-        SigmaPopulation2[i].append(random.gauss(0, SigmaForSelfCorrection))
+        SigmaPopulation2[i].append(random.uniform(0.001, SigmaForSelfCorrection))
 ############################### Make the random primary Sigma for the second function #################################
 ################################ Make the random primary Sigma for the third function #################################
 SigmaPopulation3 = []
 for i in range(0, numberOfPopulation):
     SigmaPopulation3.append([])
     for j in range(0, n3):
-        SigmaPopulation3[i].append(random.gauss(0, SigmaForSelfCorrection))
+        SigmaPopulation3[i].append(random.uniform(0.001, SigmaForSelfCorrection))
 ################################ Make the random primary Sigma for the third function #################################
 ############################################### Fitness of fist function ##############################################
 def Fitness1(population):
@@ -401,55 +401,93 @@ def OneFivthSigmaMutation3(population):
     SigmaChanger(counter13, counter23)
     return MP
 ############################################ Mutation 1/5 for third function ##########################################
+################################################## Mutation for Sigma #################################################
+def MFSCM1(population):
+    MP = copy.deepcopy(population)
+    tuPrime = 1/(math.sqrt(2*len(population[0])))
+    tu = 1/(math.sqrt(2*(math.sqrt(len(population[0])))))
+    for i in range(0, len(population)):
+        for j in range(0, len(population[i])):
+            k1 = random.gauss(0, 1)
+            k2 = random.gauss(0, 1)
+            SP = population[i][j]*math.exp(tuPrime*k1+tu*k2)
+            if ((SP<=Until)and(SP>=StartFrom)):
+                MP[i][j] = SP
+    return MP
+def MFSCM2(population):
+    MP = copy.deepcopy(population)
+    # tuPrime = 1/(math.sqrt(2*len(population[0])))
+    tu = 1/(math.sqrt(2*(math.sqrt(len(population[0])))))
+    for i in range(0, len(population)):
+        for j in range(0, len(population[i])):
+            k1 = random.gauss(0, 1)
+            # k2 = random.gauss(0, 1)
+            SP = population[i][j]*math.exp(tu*k1)
+            if ((SP<=Until)and(SP>=StartFrom)):
+                MP[i][j] = SP
+    return MP
+################################################## Mutation for Sigma #################################################
 #################################### Self correction mutation for the first function ##################################
 def SelfCorrectionMutation1(population):
     global SigmaPopulation1
-    SigmaPopulation = OneFivthSigmaMutation1(SigmaPopulation1)
+    SigmaPopulation = MFSCM1(SigmaPopulation1)
     SigmaPopulation1 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            MP[i][j] = SigmaPopulation1[i][j] + population[i][j]
+            k = population[i][j] + (SigmaPopulation1[i][j]*random.gauss(0,1))
+            if ((k>=StartFrom) and (k<=Until)):
+                MP[i][j] = k
+        if Fitness1([MP[i]])[0]<=Fitness1([population[i]])[0]:
+            MP[i] = copy.deepcopy(population[i])
     return MP
 #################################### Self correction mutation for the first function ##################################
 ################################### Self correction mutation for the second function ##################################
 def SelfCorrectionMutation2(population):
     global SigmaPopulation2
-    SigmaPopulation = OneFivthSigmaMutation2(SigmaPopulation2)
+    SigmaPopulation = MFSCM2(SigmaPopulation2)
     SigmaPopulation2 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            MP[i][j] = SigmaPopulation2[i][j] + population[i][j]
+            k = population[i][j] + (SigmaPopulation2[i][j] * random.gauss(0, 1))
+            if ((k >= StartFrom) and (k <= Until)):
+                MP[i][j] = k
+        if Fitness2([MP[i]])[0]<=Fitness2([population[i]])[0]:
+            MP[i] = copy.deepcopy(population[i])
     return MP
 ################################### Self correction mutation for the second function ##################################
 #################################### Self correction mutation for the third function ##################################
 def SelfCorrectionMutation3(population):
     global SigmaPopulation3
-    SigmaPopulation = OneFivthSigmaMutation3(SigmaPopulation3)
+    SigmaPopulation = MFSCM2(SigmaPopulation3)
     SigmaPopulation3 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            MP[i][j] = SigmaPopulation3[i][j] + population[i][j]
+            k = population[i][j] + (SigmaPopulation2[i][j] * random.gauss(0, 1))
+            if ((k >= StartFrom) and (k <= Until)):
+                MP[i][j] = k
+        if Fitness2([MP[i]])[0]<=Fitness2([population[i]])[0]:
+            MP[i] = copy.deepcopy(population[i])
     return MP
 #################################### Self correction mutation for the third function ##################################
 ####################################################### Main loop #####################################################
 MAX1 = []
 AVG1 = []
 for i in range(0, numberOfGenerations):
-    Parents11 = RouletteWheel3(PrimaryPopulation3)
+    Parents11 = RouletteWheel1(PrimaryPopulation1)
     Children11 = Mating(Parents11)
-    Muted = OneFivthSigmaMutation3(Children11)
-    choosingNextGeneration = RouletteWheel3(Muted)
-    PrimaryPopulation3 = copy.deepcopy(choosingNextGeneration)
-    k = Fitness3(PrimaryPopulation3)
-    kk = k.index((max(Fitness3(PrimaryPopulation3))))
-    print(PrimaryPopulation3[kk])
+    Muted = SelfCorrectionMutation1(Children11)
+    choosingNextGeneration = RouletteWheel1(Muted)
+    PrimaryPopulation1 = copy.deepcopy(choosingNextGeneration)
+    k = Fitness1(PrimaryPopulation1)
+    kk = k.index((max(Fitness1(PrimaryPopulation1))))
+    print(PrimaryPopulation1[kk])
     print(max(k))
     MAX1.append(max(k))
     AVG1.append(statistics.mean(k))
-    print(Sigma)
+    # print(Sigma)
     print("----------------------------------------")
 ####################################################### Main loop #####################################################
 plt.plot(AVG1)
