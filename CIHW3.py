@@ -6,6 +6,7 @@ import numpy as np
 import copy
 import statistics
 from matplotlib import pyplot as plt
+import scipy.stats as ss
 import time
 ##################################################### Libraries #######################################################
 ############################################### Sum of first n indexes ################################################
@@ -204,6 +205,24 @@ def RouletteWheel3(population):
         parents.append(population[draw[0]])
     return parents
 ########################################## Roulette wheel for third function ##########################################
+########################################## Direct Ranking for first function ##########################################
+def DirectRanking1(population):
+    MP1 = Fitness1(population)
+    MP2 = ss.rankdata(MP1)
+    return RouletteWheel1(MP2)
+########################################## Direct Ranking for first function ##########################################
+######################################### Direct Ranking for second function ##########################################
+def DirectRanking2(population):
+    MP1 = Fitness2(population)
+    MP2 = ss.rankdata(MP1)
+    return RouletteWheel2(MP2)
+######################################### Direct Ranking for second function ##########################################
+########################################## Liner Ranking for third function ###########################################
+def DirectRanking3(population):
+    MP1 = Fitness3(population)
+    MP2 = ss.rankdata(MP1)
+    return RouletteWheel3(MP2)
+########################################### Liner Ranking for third function ##########################################
 ################################# Stochastic universal sampling for the first function ################################
 def SUS1(population):
     n = len(population)
@@ -428,9 +447,8 @@ def MFSCM2(population):
     return MP
 ################################################## Mutation for Sigma #################################################
 #################################### Self correction mutation for the first function ##################################
-def SelfCorrectionMutation1(population):
-    global SigmaPopulation1
-    SigmaPopulation = MFSCM1(SigmaPopulation1)
+def SelfCorrectionMutation1(population, SigmaPopulation1):
+    SigmaPopulation = MFSCM2(SigmaPopulation3)
     SigmaPopulation1 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
@@ -443,9 +461,8 @@ def SelfCorrectionMutation1(population):
     return MP
 #################################### Self correction mutation for the first function ##################################
 ################################### Self correction mutation for the second function ##################################
-def SelfCorrectionMutation2(population):
-    global SigmaPopulation2
-    SigmaPopulation = MFSCM2(SigmaPopulation2)
+def SelfCorrectionMutation2(population, SigmaPopulation2):
+    SigmaPopulation = MFSCM2(SigmaPopulation3)
     SigmaPopulation2 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
@@ -458,38 +475,383 @@ def SelfCorrectionMutation2(population):
     return MP
 ################################### Self correction mutation for the second function ##################################
 #################################### Self correction mutation for the third function ##################################
-def SelfCorrectionMutation3(population):
-    global SigmaPopulation3
+def SelfCorrectionMutation3(population, SigmaPopulation3):
     SigmaPopulation = MFSCM2(SigmaPopulation3)
     SigmaPopulation3 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            k = population[i][j] + (SigmaPopulation2[i][j] * random.gauss(0, 1))
+            k = population[i][j] + (SigmaPopulation3[i][j] * random.gauss(0, 1))
             if ((k >= StartFrom) and (k <= Until)):
                 MP[i][j] = k
-        if Fitness2([MP[i]])[0]<=Fitness2([population[i]])[0]:
+        if Fitness2([MP[i]])[0]<=Fitness3([population[i]])[0]:
             MP[i] = copy.deepcopy(population[i])
     return MP
 #################################### Self correction mutation for the third function ##################################
 ####################################################### Main loop #####################################################
 MAX1 = []
 AVG1 = []
+MAX2 = []
+AVG2 = []
+MAX3 = []
+AVG3 = []
+MAX4 = []
+AVG4 = []
+MAX5 = []
+AVG5 = []
+MAX6 = []
+AVG6 = []
+MAX7 = []
+AVG7 = []
+MAX8 = []
+AVG8 = []
+MAX9 = []
+AVG9 = []
+MAX10 = []
+AVG10 = []
+MAX11 = []
+AVG11 = []
+MAX12 = []
+AVG12 = []
+MAX13 = []
+AVG13 = []
+MAX14 = []
+AVG14 = []
+MAX15 = []
+AVG15 = []
+MAX16 = []
+AVG16 = []
+MAX17 = []
+AVG17 = []
+MAX18 = []
+AVG18 = []
+PrimaryPopulation11=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation12=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation13=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation14=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation15=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation16=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation17=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation18=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation19=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation110=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation111=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation112=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation113=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation114=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation115=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation116=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation117=copy.deepcopy(PrimaryPopulation1)
+PrimaryPopulation118=copy.deepcopy(PrimaryPopulation1)
+SigmaPopulation11=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation12=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation13=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation14=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation15=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation16=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation17=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation18=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation19=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation110=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation111=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation112=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation113=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation114=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation115=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation116=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation117=copy.deepcopy(SigmaPopulation1)
+SigmaPopulation118=copy.deepcopy(SigmaPopulation1)
+
 for i in range(0, numberOfGenerations):
-    Parents11 = RouletteWheel1(PrimaryPopulation1)
+    Parents11 = RouletteWheel1(PrimaryPopulation11)
     Children11 = Mating(Parents11)
-    Muted = SelfCorrectionMutation1(Children11)
-    choosingNextGeneration = RouletteWheel1(Muted)
-    PrimaryPopulation1 = copy.deepcopy(choosingNextGeneration)
-    k = Fitness1(PrimaryPopulation1)
-    kk = k.index((max(Fitness1(PrimaryPopulation1))))
-    print(PrimaryPopulation1[kk])
+    Muted11 = SelfCorrectionMutation1(Children11, SigmaPopulation11)
+    choosingNextGeneration11 = RouletteWheel1(Muted11)
+    PrimaryPopulation11 = copy.deepcopy(choosingNextGeneration11)
+    k = Fitness1(PrimaryPopulation11)
+    kk = k.index((max(Fitness1(PrimaryPopulation11))))
+    print(PrimaryPopulation11[kk])
     print(max(k))
     MAX1.append(max(k))
     AVG1.append(statistics.mean(k))
-    # print(Sigma)
+    print("----------------------------------------")
+    ###################
+    Parents12 = SUS1(PrimaryPopulation12)
+    Children12 = Mating(Parents12)
+    Muted12 = SelfCorrectionMutation1(Children12, SigmaPopulation12)
+    choosingNextGeneration12 = SUS1(Muted12)
+    PrimaryPopulation12 = copy.deepcopy(choosingNextGeneration12)
+    k = Fitness1(PrimaryPopulation12)
+    kk = k.index((max(Fitness1(PrimaryPopulation12))))
+    print(PrimaryPopulation12[kk])
+    print(max(k))
+    MAX2.append(max(k))
+    AVG2.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents13 = TournomentSM1(PrimaryPopulation13)
+    Children13 = Mating(Parents13)
+    Muted13 = SelfCorrectionMutation1(Children13, SigmaPopulation13)
+    choosingNextGeneration13 = TournomentSM1(Muted13)
+    PrimaryPopulation13 = copy.deepcopy(choosingNextGeneration13)
+    k = Fitness1(PrimaryPopulation13)
+    kk = k.index((max(Fitness1(PrimaryPopulation13))))
+    print(PrimaryPopulation13[kk])
+    print(max(k))
+    MAX3.append(max(k))
+    AVG3.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents14 = TournomentSM1(PrimaryPopulation14)
+    Children14 = Mating(Parents14)
+    Muted14 = SelfCorrectionMutation1(Children14, SigmaPopulation14)
+    choosingNextGeneration14 = SUS1(Muted14)
+    PrimaryPopulation14 = copy.deepcopy(choosingNextGeneration14)
+    k = Fitness1(PrimaryPopulation14)
+    kk = k.index((max(Fitness1(PrimaryPopulation14))))
+    print(PrimaryPopulation14[kk])
+    print(max(k))
+    MAX4.append(max(k))
+    AVG4.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents15 = TournomentSM1(PrimaryPopulation15)
+    Children15 = Mating(Parents15)
+    Muted15 = SelfCorrectionMutation1(Children15, SigmaPopulation15)
+    choosingNextGeneration15 = RouletteWheel1(Muted15)
+    PrimaryPopulation15 = copy.deepcopy(choosingNextGeneration15)
+    k = Fitness1(PrimaryPopulation15)
+    kk = k.index((max(Fitness1(PrimaryPopulation15))))
+    print(PrimaryPopulation15[kk])
+    print(max(k))
+    MAX5.append(max(k))
+    AVG5.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents16 = RouletteWheel1(PrimaryPopulation16)
+    Children16 = Mating(Parents16)
+    Muted16 = SelfCorrectionMutation1(Children16, SigmaPopulation16)
+    choosingNextGeneration16 = SUS1(Muted16)
+    PrimaryPopulation16 = copy.deepcopy(choosingNextGeneration16)
+    k = Fitness1(PrimaryPopulation16)
+    kk = k.index((max(Fitness1(PrimaryPopulation16))))
+    print(PrimaryPopulation16[kk])
+    print(max(k))
+    MAX6.append(max(k))
+    AVG6.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents17 = RouletteWheel1(PrimaryPopulation17)
+    Children17 = Mating(Parents17)
+    Muted17 = SelfCorrectionMutation1(Children17, SigmaPopulation17)
+    choosingNextGeneration17 = TournomentSM1(Muted17)
+    PrimaryPopulation17 = copy.deepcopy(choosingNextGeneration17)
+    k = Fitness1(PrimaryPopulation17)
+    kk = k.index((max(Fitness1(PrimaryPopulation17))))
+    print(PrimaryPopulation17[kk])
+    print(max(k))
+    MAX7.append(max(k))
+    AVG7.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents18 = SUS1(PrimaryPopulation18)
+    Children18 = Mating(Parents18)
+    Muted18 = SelfCorrectionMutation1(Children18, SigmaPopulation18)
+    choosingNextGeneration18 = RouletteWheel1(Muted18)
+    PrimaryPopulation18 = copy.deepcopy(choosingNextGeneration18)
+    k = Fitness1(PrimaryPopulation18)
+    kk = k.index((max(Fitness1(PrimaryPopulation18))))
+    print(PrimaryPopulation18[kk])
+    print(max(k))
+    MAX8.append(max(k))
+    AVG8.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents19 = SUS1(PrimaryPopulation19)
+    Children19 = Mating(Parents19)
+    Muted19 = SelfCorrectionMutation1(Children19, SigmaPopulation19)
+    choosingNextGeneration19 = TournomentSM1(Muted19)
+    PrimaryPopulation19 = copy.deepcopy(choosingNextGeneration19)
+    k = Fitness1(PrimaryPopulation19)
+    kk = k.index((max(Fitness1(PrimaryPopulation19))))
+    print(PrimaryPopulation19[kk])
+    print(max(k))
+    MAX9.append(max(k))
+    AVG9.append(statistics.mean(k))
+    print("----------------------------------------")
+    ####################
+    Parents110 = RouletteWheel1(PrimaryPopulation110)
+    Children110 = Mating(Parents110)
+    Muted110 = OneFivthSigmaMutation1(Children110)
+    choosingNextGeneration110 = RouletteWheel1(Muted110)
+    PrimaryPopulation110 = copy.deepcopy(choosingNextGeneration110)
+    k = Fitness1(PrimaryPopulation110)
+    kk = k.index((max(Fitness1(PrimaryPopulation110))))
+    print(PrimaryPopulation110[kk])
+    print(max(k))
+    MAX10.append(max(k))
+    AVG10.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents111 = SUS1(PrimaryPopulation111)
+    Children111 = Mating(Parents111)
+    Muted111 = OneFivthSigmaMutation1(Children111)
+    choosingNextGeneration111 = SUS1(Muted111)
+    PrimaryPopulation111 = copy.deepcopy(choosingNextGeneration111)
+    k = Fitness1(PrimaryPopulation111)
+    kk = k.index((max(Fitness1(PrimaryPopulation111))))
+    print(PrimaryPopulation111[kk])
+    print(max(k))
+    MAX11.append(max(k))
+    AVG11.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents112 = TournomentSM1(PrimaryPopulation112)
+    Children112 = Mating(Parents112)
+    Muted112 = OneFivthSigmaMutation1(Children112)
+    choosingNextGeneration112 = TournomentSM1(Muted112)
+    PrimaryPopulation112 = copy.deepcopy(choosingNextGeneration112)
+    k = Fitness1(PrimaryPopulation112)
+    kk = k.index((max(Fitness1(PrimaryPopulation112))))
+    print(PrimaryPopulation112[kk])
+    print(max(k))
+    MAX12.append(max(k))
+    AVG12.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents113 = TournomentSM1(PrimaryPopulation113)
+    Children113 = Mating(Parents113)
+    Muted113 = OneFivthSigmaMutation1(Children113)
+    choosingNextGeneration113 = SUS1(Muted113)
+    PrimaryPopulation113 = copy.deepcopy(choosingNextGeneration113)
+    k = Fitness1(PrimaryPopulation113)
+    kk = k.index((max(Fitness1(PrimaryPopulation113))))
+    print(PrimaryPopulation113[kk])
+    print(max(k))
+    MAX13.append(max(k))
+    AVG13.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents114 = TournomentSM1(PrimaryPopulation114)
+    Children114 = Mating(Parents114)
+    Muted114 = OneFivthSigmaMutation1(Children114)
+    choosingNextGeneration114 = RouletteWheel1(Muted114)
+    PrimaryPopulation114 = copy.deepcopy(choosingNextGeneration114)
+    k = Fitness1(PrimaryPopulation114)
+    kk = k.index((max(Fitness1(PrimaryPopulation114))))
+    print(PrimaryPopulation114[kk])
+    print(max(k))
+    MAX14.append(max(k))
+    AVG14.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents115 = RouletteWheel1(PrimaryPopulation115)
+    Children115 = Mating(Parents115)
+    Muted115 = OneFivthSigmaMutation1(Children115)
+    choosingNextGeneration115 = SUS1(Muted115)
+    PrimaryPopulation115 = copy.deepcopy(choosingNextGeneration115)
+    k = Fitness1(PrimaryPopulation115)
+    kk = k.index((max(Fitness1(PrimaryPopulation115))))
+    print(PrimaryPopulation115[kk])
+    print(max(k))
+    MAX15.append(max(k))
+    AVG15.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents116 = RouletteWheel1(PrimaryPopulation116)
+    Children116 = Mating(Parents116)
+    Muted116 = OneFivthSigmaMutation1(Children116)
+    choosingNextGeneration116 = TournomentSM1(Muted116)
+    PrimaryPopulation116 = copy.deepcopy(choosingNextGeneration116)
+    k = Fitness1(PrimaryPopulation116)
+    kk = k.index((max(Fitness1(PrimaryPopulation116))))
+    print(PrimaryPopulation116[kk])
+    print(max(k))
+    MAX16.append(max(k))
+    AVG16.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents117 = SUS1(PrimaryPopulation117)
+    Children117 = Mating(Parents117)
+    Muted117 = OneFivthSigmaMutation1(Children117)
+    choosingNextGeneration117 = RouletteWheel1(Muted117)
+    PrimaryPopulation117 = copy.deepcopy(choosingNextGeneration117)
+    k = Fitness1(PrimaryPopulation117)
+    kk = k.index((max(Fitness1(PrimaryPopulation117))))
+    print(PrimaryPopulation117[kk])
+    print(max(k))
+    MAX17.append(max(k))
+    AVG17.append(statistics.mean(k))
+    print("----------------------------------------")
+    ###################
+    Parents118 = SUS1(PrimaryPopulation118)
+    Children118 = Mating(Parents118)
+    Muted118 = OneFivthSigmaMutation1(Children118)
+    choosingNextGeneration118 = TournomentSM1(Muted118)
+    PrimaryPopulation118 = copy.deepcopy(choosingNextGeneration118)
+    k = Fitness1(PrimaryPopulation118)
+    kk = k.index((max(Fitness1(PrimaryPopulation118))))
+    print(PrimaryPopulation118[kk])
+    print(max(k))
+    MAX18.append(max(k))
+    AVG18.append(statistics.mean(k))
     print("----------------------------------------")
 ####################################################### Main loop #####################################################
-plt.plot(AVG1)
-plt.plot(MAX1)
+
+fig, axs = plt.subplots(3, 3)
+axs[0, 0].plot(MAX1, label='Self Correction')
+axs[0, 0].set_title('function1/RW/RW')
+axs[0, 1].plot(MAX2, 'tab:orange', label='Self Correction')
+axs[0, 1].set_title('function1/SUS/SUS')
+axs[0, 2].plot(MAX3, 'tab:green', label='Self Correction')
+axs[0, 2].set_title('function1/T/T')
+axs[1, 0].plot(MAX4, 'tab:red', label='Self Correction')
+axs[1, 0].set_title('function1/T/SUS')
+axs[1, 1].plot(MAX5, 'tab:blue', label='Self Correction')
+axs[1, 1].set_title('function1/T/RW')
+axs[1, 2].plot(MAX6, 'tab:olive', label='Self Correction')
+axs[1, 2].set_title('function1/RW/SUS')
+axs[2, 0].plot(MAX7, 'tab:pink', label='Self Correction')
+axs[2, 0].set_title('function1/RW/T')
+axs[2, 1].plot(MAX8, 'tab:brown', label='Self Correction')
+axs[2, 1].set_title('function1/SUS/RW')
+axs[2, 2].plot(MAX9, 'tab:purple', label='Self Correction')
+axs[2, 2].set_title('function1/SUS/T')
+
+axs[0, 0].plot(MAX10, 'tab:cyan', label='1/5 Rule')
+axs[0, 1].plot(MAX11, 'tab:cyan', label='1/5 Rule')
+axs[0, 2].plot(MAX12, 'tab:cyan', label='1/5 Rule')
+axs[1, 0].plot(MAX13, 'tab:cyan', label='1/5 Rule')
+axs[1, 1].plot(MAX14, 'tab:cyan', label='1/5 Rule')
+axs[1, 2].plot(MAX15, 'tab:cyan', label='1/5 Rule')
+axs[2, 0].plot(MAX16, 'tab:cyan', label='1/5 Rule')
+axs[2, 1].plot(MAX17, 'tab:cyan', label='1/5 Rule')
+axs[2, 2].plot(MAX18, 'tab:cyan', label='1/5 Rule')
+
+for ax in axs.flat:
+    ax.set(xlabel='Number of generations', ylabel='Fitness from 10')
+
+# Hide x labels and tick labels for top plots and y ticks for right plots.
+for ax in axs.flat:
+    ax.label_outer()
+
+
+# plt.plot(AVG1)
+# plt.plot(MAX1)
+# plt.plot(AVG2)
+# plt.plot(MAX2)
+# plt.plot(AVG3)
+# plt.plot(MAX3)
+# plt.plot(AVG4)
+# plt.plot(MAX4)
+# plt.plot(AVG5)
+# plt.plot(MAX5)
+# plt.plot(AVG6)
+# plt.plot(MAX6)
+# plt.plot(AVG7)
+# plt.plot(MAX7)
+# plt.plot(AVG8)
+# plt.plot(MAX8)
+# plt.plot(AVG9)
+# plt.plot(MAX9)
 plt.show()
