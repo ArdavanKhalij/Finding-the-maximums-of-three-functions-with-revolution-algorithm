@@ -207,22 +207,70 @@ def RouletteWheel3(population):
 ########################################## Roulette wheel for third function ##########################################
 ########################################## Direct Ranking for first function ##########################################
 def DirectRanking1(population):
-    MP1 = Fitness1(population)
-    MP2 = ss.rankdata(MP1)
-    return RouletteWheel1(MP2)
+    MP = Fitness1(population)
+    values = ss.rankdata(MP)
+    poss = []
+    sum = 0
+    for i in range(0, len(values)):
+        sum = sum + values[i]
+    for i in range(0, len(values)):
+        poss.append((values[i]) / sum)
+    x1 = 0.0
+    for i in range(0, len(poss) - 1):
+        x1 = x1 + poss[i]
+    x2 = len(poss)
+    poss[x2 - 1] = 1 - x1
+    q = list(range(0, len(population)))
+    parents = []
+    for i in range(0, len(population)):
+        draw = choice(q, 1, p=poss)
+        parents.append(population[draw[0]])
+    return parents
 ########################################## Direct Ranking for first function ##########################################
 ######################################### Direct Ranking for second function ##########################################
 def DirectRanking2(population):
-    MP1 = Fitness2(population)
-    MP2 = ss.rankdata(MP1)
-    return RouletteWheel2(MP2)
+    MP = Fitness2(population)
+    values = ss.rankdata(MP)
+    poss = []
+    sum = 0
+    for i in range(0, len(values)):
+        sum = sum + values[i]
+    for i in range(0, len(values)):
+        poss.append((values[i]) / sum)
+    x1 = 0.0
+    for i in range(0, len(poss) - 1):
+        x1 = x1 + poss[i]
+    x2 = len(poss)
+    poss[x2 - 1] = 1 - x1
+    q = list(range(0, len(population)))
+    parents = []
+    for i in range(0, len(population)):
+        draw = choice(q, 1, p=poss)
+        parents.append(population[draw[0]])
+    return parents
 ######################################### Direct Ranking for second function ##########################################
-########################################## Liner Ranking for third function ###########################################
+########################################## Direct Ranking for third function ###########################################
 def DirectRanking3(population):
-    MP1 = Fitness3(population)
-    MP2 = ss.rankdata(MP1)
-    return RouletteWheel3(MP2)
-########################################### Liner Ranking for third function ##########################################
+    MP = Fitness3(population)
+    values = ss.rankdata(MP)
+    poss = []
+    sum = 0
+    for i in range(0, len(values)):
+        sum = sum + values[i]
+    for i in range(0, len(values)):
+        poss.append((values[i]) / sum)
+    x1 = 0.0
+    for i in range(0, len(poss) - 1):
+        x1 = x1 + poss[i]
+    x2 = len(poss)
+    poss[x2 - 1] = 1 - x1
+    q = list(range(0, len(population)))
+    parents = []
+    for i in range(0, len(population)):
+        draw = choice(q, 1, p=poss)
+        parents.append(population[draw[0]])
+    return parents
+########################################## Direct Ranking for third function ##########################################
 ################################# Stochastic universal sampling for the first function ################################
 def SUS1(population):
     n = len(population)
