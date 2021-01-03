@@ -8,6 +8,8 @@ import statistics
 from matplotlib import pyplot as plt
 import scipy.stats as ss
 import time
+from multiprocessing import *
+import multiprocessing
 ##################################################### Libraries #######################################################
 ############################################### Sum of first n indexes ################################################
 def NSum(list, n):
@@ -79,6 +81,7 @@ with open('input.txt', 'r') as f:
 f.close()
 ###################################################### Get input ######################################################
 ############################## Make the random primary population for the first function ##############################
+start = time.time()
 PrimaryPopulation1 = []
 for i in range(0, numberOfPopulation):
     PrimaryPopulation1.append([])
@@ -496,12 +499,12 @@ def MFSCM2(population):
 ################################################## Mutation for Sigma #################################################
 #################################### Self correction mutation for the first function ##################################
 def SelfCorrectionMutation1(population, SigmaPopulation1):
-    SigmaPopulation = MFSCM2(SigmaPopulation3)
+    SigmaPopulation = MFSCM2(SigmaPopulation1)
     SigmaPopulation1 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
         for j in range(0, len(population[i])):
-            k = population[i][j] + (SigmaPopulation1[i][j]*random.gauss(0,1))
+            k = population[i][j] + (SigmaPopulation1[i][j] * random.gauss(0,1))
             if ((k>=StartFrom) and (k<=Until)):
                 MP[i][j] = k
         if Fitness1([MP[i]])[0]<=Fitness1([population[i]])[0]:
@@ -510,7 +513,7 @@ def SelfCorrectionMutation1(population, SigmaPopulation1):
 #################################### Self correction mutation for the first function ##################################
 ################################### Self correction mutation for the second function ##################################
 def SelfCorrectionMutation2(population, SigmaPopulation2):
-    SigmaPopulation = MFSCM2(SigmaPopulation3)
+    SigmaPopulation = MFSCM2(SigmaPopulation2)
     SigmaPopulation2 = copy.deepcopy(SigmaPopulation)
     MP = copy.deepcopy(population)
     for i in range(0, len(population)):
@@ -537,6 +540,7 @@ def SelfCorrectionMutation3(population, SigmaPopulation3):
     return MP
 #################################### Self correction mutation for the third function ##################################
 ####################################################### Main loop #####################################################
+
 MAX1 = []
 AVG1 = []
 MAX2 = []
@@ -845,61 +849,64 @@ for i in range(0, numberOfGenerations):
     AVG18.append(statistics.mean(k))
     print("----------------------------------------")
 ####################################################### Main loop #####################################################
+def chartAndTime():
+    global start
+    global MAX1
+    global MAX2
+    global MAX3
+    global MAX4
+    global MAX5
+    global MAX6
+    global MAX7
+    global MAX8
+    global MAX9
+    global MAX10
+    global MAX11
+    global MAX12
+    global MAX13
+    global MAX14
+    global MAX15
+    global MAX16
+    global MAX17
+    global MAX18
+    TIME = time.time()-start
+    print(TIME)
 
-fig, axs = plt.subplots(3, 3)
-axs[0, 0].plot(MAX1, label='Self Correction')
-axs[0, 0].set_title('function1/RW/RW')
-axs[0, 1].plot(MAX2, 'tab:orange', label='Self Correction')
-axs[0, 1].set_title('function1/SUS/SUS')
-axs[0, 2].plot(MAX3, 'tab:green', label='Self Correction')
-axs[0, 2].set_title('function1/T/T')
-axs[1, 0].plot(MAX4, 'tab:red', label='Self Correction')
-axs[1, 0].set_title('function1/T/SUS')
-axs[1, 1].plot(MAX5, 'tab:blue', label='Self Correction')
-axs[1, 1].set_title('function1/T/RW')
-axs[1, 2].plot(MAX6, 'tab:olive', label='Self Correction')
-axs[1, 2].set_title('function1/RW/SUS')
-axs[2, 0].plot(MAX7, 'tab:pink', label='Self Correction')
-axs[2, 0].set_title('function1/RW/T')
-axs[2, 1].plot(MAX8, 'tab:brown', label='Self Correction')
-axs[2, 1].set_title('function1/SUS/RW')
-axs[2, 2].plot(MAX9, 'tab:purple', label='Self Correction')
-axs[2, 2].set_title('function1/SUS/T')
+    fig, axs = plt.subplots(3, 3)
+    axs[0, 0].plot(MAX1, label='Self Correction')
+    axs[0, 0].set_title('function1/RW/RW')
+    axs[0, 1].plot(MAX2, 'tab:orange', label='Self Correction')
+    axs[0, 1].set_title('function1/SUS/SUS')
+    axs[0, 2].plot(MAX3, 'tab:green', label='Self Correction')
+    axs[0, 2].set_title('function1/T/T')
+    axs[1, 0].plot(MAX4, 'tab:red', label='Self Correction')
+    axs[1, 0].set_title('function1/T/SUS')
+    axs[1, 1].plot(MAX5, 'tab:blue', label='Self Correction')
+    axs[1, 1].set_title('function1/T/RW')
+    axs[1, 2].plot(MAX6, 'tab:olive', label='Self Correction')
+    axs[1, 2].set_title('function1/RW/SUS')
+    axs[2, 0].plot(MAX7, 'tab:pink', label='Self Correction')
+    axs[2, 0].set_title('function1/RW/T')
+    axs[2, 1].plot(MAX8, 'tab:brown', label='Self Correction')
+    axs[2, 1].set_title('function1/SUS/RW')
+    axs[2, 2].plot(MAX9, 'tab:purple', label='Self Correction')
+    axs[2, 2].set_title('function1/SUS/T')
 
-axs[0, 0].plot(MAX10, 'tab:cyan', label='1/5 Rule')
-axs[0, 1].plot(MAX11, 'tab:cyan', label='1/5 Rule')
-axs[0, 2].plot(MAX12, 'tab:cyan', label='1/5 Rule')
-axs[1, 0].plot(MAX13, 'tab:cyan', label='1/5 Rule')
-axs[1, 1].plot(MAX14, 'tab:cyan', label='1/5 Rule')
-axs[1, 2].plot(MAX15, 'tab:cyan', label='1/5 Rule')
-axs[2, 0].plot(MAX16, 'tab:cyan', label='1/5 Rule')
-axs[2, 1].plot(MAX17, 'tab:cyan', label='1/5 Rule')
-axs[2, 2].plot(MAX18, 'tab:cyan', label='1/5 Rule')
+    axs[0, 0].plot(MAX10, 'tab:cyan', label='1/5 Rule')
+    axs[0, 1].plot(MAX11, 'tab:cyan', label='1/5 Rule')
+    axs[0, 2].plot(MAX12, 'tab:cyan', label='1/5 Rule')
+    axs[1, 0].plot(MAX13, 'tab:cyan', label='1/5 Rule')
+    axs[1, 1].plot(MAX14, 'tab:cyan', label='1/5 Rule')
+    axs[1, 2].plot(MAX15, 'tab:cyan', label='1/5 Rule')
+    axs[2, 0].plot(MAX16, 'tab:cyan', label='1/5 Rule')
+    axs[2, 1].plot(MAX17, 'tab:cyan', label='1/5 Rule')
+    axs[2, 2].plot(MAX18, 'tab:cyan', label='1/5 Rule')
 
-for ax in axs.flat:
-    ax.set(xlabel='Number of generations', ylabel='Fitness from 10')
+    for ax in axs.flat:
+        ax.set(xlabel='Number of generations', ylabel='Fitness from 10')
 
-# Hide x labels and tick labels for top plots and y ticks for right plots.
-for ax in axs.flat:
-    ax.label_outer()
+    for ax in axs.flat:
+        ax.label_outer()
 
-
-# plt.plot(AVG1)
-# plt.plot(MAX1)
-# plt.plot(AVG2)
-# plt.plot(MAX2)
-# plt.plot(AVG3)
-# plt.plot(MAX3)
-# plt.plot(AVG4)
-# plt.plot(MAX4)
-# plt.plot(AVG5)
-# plt.plot(MAX5)
-# plt.plot(AVG6)
-# plt.plot(MAX6)
-# plt.plot(AVG7)
-# plt.plot(MAX7)
-# plt.plot(AVG8)
-# plt.plot(MAX8)
-# plt.plot(AVG9)
-# plt.plot(MAX9)
+chartAndTime()
 plt.show()
