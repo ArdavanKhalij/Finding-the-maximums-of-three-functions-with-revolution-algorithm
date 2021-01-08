@@ -10,6 +10,7 @@ import scipy.stats as ss
 import time
 from multiprocessing import *
 ##################################################### Libraries #######################################################
+count = 0
 ############################################### Sum of first n indexes ################################################
 def NSum(list, n):
     sum=0
@@ -77,6 +78,8 @@ with open('input.txt', 'r') as f:
     Sigma = float(f.readline())
     f.readline()
     SigmaForSelfAdaptive = float(f.readline())
+    f.readline()
+    times = int(f.readline())
 f.close()
 ###################################################### Get input ######################################################
 ############################## Make the random primary population for the first function ##############################
@@ -105,7 +108,7 @@ for i in range(0, numberOfPopulation):
 ################################ Make the random primary Sigma for the first function #################################
 start2 = time.time()
 SigmaPopulation1 = []
-for i in range(0, numberOfPopulation):
+for i in range(0, numberOfPopulation*times):
     SigmaPopulation1.append([])
     for j in range(0, n1):
         SigmaPopulation1[i].append(random.uniform(0.001, SigmaForSelfAdaptive))
@@ -113,14 +116,14 @@ end2 = time.time() - start2
 ################################ Make the random primary Sigma for the first function #################################
 ############################### Make the random primary Sigma for the second function #################################
 SigmaPopulation2 = []
-for i in range(0, numberOfPopulation):
+for i in range(0, numberOfPopulation*times):
     SigmaPopulation2.append([])
     for j in range(0, d):
         SigmaPopulation2[i].append(random.uniform(0.001, SigmaForSelfAdaptive))
 ############################### Make the random primary Sigma for the second function #################################
 ################################ Make the random primary Sigma for the third function #################################
 SigmaPopulation3 = []
-for i in range(0, numberOfPopulation):
+for i in range(0, numberOfPopulation*times):
     SigmaPopulation3.append([])
     for j in range(0, n3):
         SigmaPopulation3[i].append(random.uniform(0.001, SigmaForSelfAdaptive))
@@ -163,7 +166,7 @@ def RouletteWheel1(population):
     poss[x2 - 1] = 1 - x1
     q = list(range(0, len(population)))
     parents = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = choice(q, 1, p=poss)
         parents.append(population[draw[0]])
     return parents
@@ -184,7 +187,7 @@ def RouletteWheel2(population):
     poss[x2 - 1] = 1 - x1
     q = list(range(0, len(population)))
     parents = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = choice(q, 1, p=poss)
         parents.append(population[draw[0]])
     return parents
@@ -205,7 +208,7 @@ def RouletteWheel3(population):
     poss[x2 - 1] = 1 - x1
     q = list(range(0, len(population)))
     parents = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = choice(q, 1, p=poss)
         parents.append(population[draw[0]])
     return parents
@@ -227,7 +230,7 @@ def DirectRanking1(population):
     poss[x2 - 1] = 1 - x1
     q = list(range(0, len(population)))
     parents = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = choice(q, 1, p=poss)
         parents.append(population[draw[0]])
     return parents
@@ -249,7 +252,7 @@ def DirectRanking2(population):
     poss[x2 - 1] = 1 - x1
     q = list(range(0, len(population)))
     parents = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = choice(q, 1, p=poss)
         parents.append(population[draw[0]])
     return parents
@@ -271,14 +274,14 @@ def DirectRanking3(population):
     poss[x2 - 1] = 1 - x1
     q = list(range(0, len(population)))
     parents = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = choice(q, 1, p=poss)
         parents.append(population[draw[0]])
     return parents
 ########################################## Direct Ranking for third function ##########################################
 ################################# Stochastic universal sampling for the first function ################################
 def SUS1(population):
-    n = len(population)
+    n = numberOfPopulation
     sum = 0
     startPoint = random.uniform(0, 1/n)
     choosingVector = np.arange(startPoint, 1.0, 1/n)
@@ -294,7 +297,7 @@ def SUS1(population):
     x2 = len(poss)
     poss[x2 - 1] = 1 - x1
     q = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         for j in range(0, len(poss)):
             if(choosingVector[i]<NSum(poss, j)):
                 q.append(population[j])
@@ -303,7 +306,7 @@ def SUS1(population):
 ################################ Stochastic universal sampling for the first function #################################
 ################################ Stochastic universal sampling for the second function ################################
 def SUS2(population):
-    n = len(population)
+    n = numberOfPopulation
     sum = 0
     startPoint = random.uniform(0, 1 / n)
     choosingVector = np.arange(startPoint, 1.0, 1 / n)
@@ -319,7 +322,7 @@ def SUS2(population):
     x2 = len(poss)
     poss[x2 - 1] = 1 - x1
     q = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         for j in range(0, len(poss)):
             if (choosingVector[i] < NSum(poss, j)):
                 q.append(population[j])
@@ -328,7 +331,7 @@ def SUS2(population):
 ################################ Stochastic universal sampling for the second function ################################
 ################################ Stochastic universal sampling for the third function #################################
 def SUS3(population):
-    n = len(population)
+    n = numberOfPopulation
     sum = 0
     startPoint = random.uniform(0, 1 / n)
     choosingVector = np.arange(startPoint, 1.0, 1 / n)
@@ -344,7 +347,7 @@ def SUS3(population):
     x2 = len(poss)
     poss[x2 - 1] = 1 - x1
     q = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         for j in range(0, len(poss)):
             if (choosingVector[i] < NSum(poss, j)):
                 q.append(population[j])
@@ -354,7 +357,7 @@ def SUS3(population):
 ################################## Tournoment sampling method for the first function ##################################
 def TournomentSM1(population):
     result = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = random.choices(population, k=tournomentPopulation)
         k = Fitness1(draw)
         k2 = max(k)
@@ -364,7 +367,7 @@ def TournomentSM1(population):
 ################################# Tournoment sampling method for the second function ##################################
 def TournomentSM2(population):
     result = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = random.choices(population, k=tournomentPopulation)
         k = Fitness2(draw)
         k2 = max(k)
@@ -374,7 +377,7 @@ def TournomentSM2(population):
 ################################## Tournoment sampling method for the third function ##################################
 def TournomentSM3(population):
     result = []
-    for i in range(0, len(population)):
+    for i in range(0, numberOfPopulation):
         draw = random.choices(population, k=tournomentPopulation)
         k = Fitness3(draw)
         k2 = max(k)
@@ -385,19 +388,21 @@ def TournomentSM3(population):
 def Mating(population):
     i = 0
     children = []
-    while(i<len(population)):
+    q = [item for item in range(0, numberOfPopulation)]
+    while (i<len(population)*times):
         percent = np.random.uniform(0.0, 100.0)
-        if(percent<=MatingPercentage):
-            k = random.randint(0, len(population[i])-1)
-            for j in range(k, len(population[i])):
-                population[i][j] = (population[i][j] + population[i+1][j])/2
-                population[i + 1][j] = (population[i][j] + population[i + 1][j]) / 2
-            children.append(population[i])
-            children.append(population[i+1])
+        draw1 = choice(q, 2)
+        if (percent<=MatingPercentage):
+            k = random.randint(0, len(population[draw1[0]]) - 1)
+            for j in range(k, len(population[draw1[0]])):
+                population[draw1[0]][j] = (population[draw1[0]][j] + population[draw1[1]][j])/2
+                population[draw1[1]][j] = (population[draw1[0]][j] + population[draw1[1]][j])/2
+            children.append(population[draw1[0]])
+            children.append(population[draw1[1]])
         else:
-            children.append(population[i])
-            children.append(population[i+1])
-        i = i + 2
+            children.append(population[draw1[0]])
+            children.append(population[draw1[1]])
+        i=i+2
     return children
 ######################################################## Mating #######################################################
 #################################################### Sigma changer ####################################################
@@ -616,241 +621,6 @@ SigmaPopulation116=copy.deepcopy(SigmaPopulation1)
 SigmaPopulation117=copy.deepcopy(SigmaPopulation1)
 SigmaPopulation118=copy.deepcopy(SigmaPopulation1)
 
-# for i in range(0, numberOfGenerations):
-#     Parents11 = RouletteWheel1(PrimaryPopulation11)
-#     Children11 = Mating(Parents11)
-#     Muted11 = SelfAdaptiveMutation1(Children11, SigmaPopulation11)
-#     choosingNextGeneration11 = RouletteWheel1(Muted11)
-#     PrimaryPopulation11 = copy.deepcopy(choosingNextGeneration11)
-#     k = Fitness1(PrimaryPopulation11)
-#     kk = k.index((max(Fitness1(PrimaryPopulation11))))
-#     print(PrimaryPopulation11[kk])
-#     print(max(k))
-#     MAX1.append(max(k))
-#     AVG1.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents12 = SUS1(PrimaryPopulation12)
-#     Children12 = Mating(Parents12)
-#     Muted12 = SelfAdaptiveMutation1(Children12, SigmaPopulation12)
-#     choosingNextGeneration12 = SUS1(Muted12)
-#     PrimaryPopulation12 = copy.deepcopy(choosingNextGeneration12)
-#     k = Fitness1(PrimaryPopulation12)
-#     kk = k.index((max(Fitness1(PrimaryPopulation12))))
-#     print(PrimaryPopulation12[kk])
-#     print(max(k))
-#     MAX2.append(max(k))
-#     AVG2.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents13 = TournomentSM1(PrimaryPopulation13)
-#     Children13 = Mating(Parents13)
-#     Muted13 = SelfAdaptiveMutation1(Children13, SigmaPopulation13)
-#     choosingNextGeneration13 = TournomentSM1(Muted13)
-#     PrimaryPopulation13 = copy.deepcopy(choosingNextGeneration13)
-#     k = Fitness1(PrimaryPopulation13)
-#     kk = k.index((max(Fitness1(PrimaryPopulation13))))
-#     print(PrimaryPopulation13[kk])
-#     print(max(k))
-#     MAX3.append(max(k))
-#     AVG3.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents14 = TournomentSM1(PrimaryPopulation14)
-#     Children14 = Mating(Parents14)
-#     Muted14 = SelfAdaptiveMutation1(Children14, SigmaPopulation14)
-#     choosingNextGeneration14 = SUS1(Muted14)
-#     PrimaryPopulation14 = copy.deepcopy(choosingNextGeneration14)
-#     k = Fitness1(PrimaryPopulation14)
-#     kk = k.index((max(Fitness1(PrimaryPopulation14))))
-#     print(PrimaryPopulation14[kk])
-#     print(max(k))
-#     MAX4.append(max(k))
-#     AVG4.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents15 = TournomentSM1(PrimaryPopulation15)
-#     Children15 = Mating(Parents15)
-#     Muted15 = SelfAdaptiveMutation1(Children15, SigmaPopulation15)
-#     choosingNextGeneration15 = RouletteWheel1(Muted15)
-#     PrimaryPopulation15 = copy.deepcopy(choosingNextGeneration15)
-#     k = Fitness1(PrimaryPopulation15)
-#     kk = k.index((max(Fitness1(PrimaryPopulation15))))
-#     print(PrimaryPopulation15[kk])
-#     print(max(k))
-#     MAX5.append(max(k))
-#     AVG5.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents16 = RouletteWheel1(PrimaryPopulation16)
-#     Children16 = Mating(Parents16)
-#     Muted16 = SelfAdaptiveMutation1(Children16, SigmaPopulation16)
-#     choosingNextGeneration16 = SUS1(Muted16)
-#     PrimaryPopulation16 = copy.deepcopy(choosingNextGeneration16)
-#     k = Fitness1(PrimaryPopulation16)
-#     kk = k.index((max(Fitness1(PrimaryPopulation16))))
-#     print(PrimaryPopulation16[kk])
-#     print(max(k))
-#     MAX6.append(max(k))
-#     AVG6.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents17 = RouletteWheel1(PrimaryPopulation17)
-#     Children17 = Mating(Parents17)
-#     Muted17 = SelfAdaptiveMutation1(Children17, SigmaPopulation17)
-#     choosingNextGeneration17 = TournomentSM1(Muted17)
-#     PrimaryPopulation17 = copy.deepcopy(choosingNextGeneration17)
-#     k = Fitness1(PrimaryPopulation17)
-#     kk = k.index((max(Fitness1(PrimaryPopulation17))))
-#     print(PrimaryPopulation17[kk])
-#     print(max(k))
-#     MAX7.append(max(k))
-#     AVG7.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents18 = SUS1(PrimaryPopulation18)
-#     Children18 = Mating(Parents18)
-#     Muted18 = SelfAdaptiveMutation1(Children18, SigmaPopulation18)
-#     choosingNextGeneration18 = RouletteWheel1(Muted18)
-#     PrimaryPopulation18 = copy.deepcopy(choosingNextGeneration18)
-#     k = Fitness1(PrimaryPopulation18)
-#     kk = k.index((max(Fitness1(PrimaryPopulation18))))
-#     print(PrimaryPopulation18[kk])
-#     print(max(k))
-#     MAX8.append(max(k))
-#     AVG8.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents19 = SUS1(PrimaryPopulation19)
-#     Children19 = Mating(Parents19)
-#     Muted19 = SelfAdaptiveMutation1(Children19, SigmaPopulation19)
-#     choosingNextGeneration19 = TournomentSM1(Muted19)
-#     PrimaryPopulation19 = copy.deepcopy(choosingNextGeneration19)
-#     k = Fitness1(PrimaryPopulation19)
-#     kk = k.index((max(Fitness1(PrimaryPopulation19))))
-#     print(PrimaryPopulation19[kk])
-#     print(max(k))
-#     MAX9.append(max(k))
-#     AVG9.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ####################
-#     Parents110 = RouletteWheel1(PrimaryPopulation110)
-#     Children110 = Mating(Parents110)
-#     Muted110 = OneFivthSigmaMutation1(Children110)
-#     choosingNextGeneration110 = RouletteWheel1(Muted110)
-#     PrimaryPopulation110 = copy.deepcopy(choosingNextGeneration110)
-#     k = Fitness1(PrimaryPopulation110)
-#     kk = k.index((max(Fitness1(PrimaryPopulation110))))
-#     print(PrimaryPopulation110[kk])
-#     print(max(k))
-#     MAX10.append(max(k))
-#     AVG10.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents111 = SUS1(PrimaryPopulation111)
-#     Children111 = Mating(Parents111)
-#     Muted111 = OneFivthSigmaMutation1(Children111)
-#     choosingNextGeneration111 = SUS1(Muted111)
-#     PrimaryPopulation111 = copy.deepcopy(choosingNextGeneration111)
-#     k = Fitness1(PrimaryPopulation111)
-#     kk = k.index((max(Fitness1(PrimaryPopulation111))))
-#     print(PrimaryPopulation111[kk])
-#     print(max(k))
-#     MAX11.append(max(k))
-#     AVG11.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents112 = TournomentSM1(PrimaryPopulation112)
-#     Children112 = Mating(Parents112)
-#     Muted112 = OneFivthSigmaMutation1(Children112)
-#     choosingNextGeneration112 = TournomentSM1(Muted112)
-#     PrimaryPopulation112 = copy.deepcopy(choosingNextGeneration112)
-#     k = Fitness1(PrimaryPopulation112)
-#     kk = k.index((max(Fitness1(PrimaryPopulation112))))
-#     print(PrimaryPopulation112[kk])
-#     print(max(k))
-#     MAX12.append(max(k))
-#     AVG12.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents113 = TournomentSM1(PrimaryPopulation113)
-#     Children113 = Mating(Parents113)
-#     Muted113 = OneFivthSigmaMutation1(Children113)
-#     choosingNextGeneration113 = SUS1(Muted113)
-#     PrimaryPopulation113 = copy.deepcopy(choosingNextGeneration113)
-#     k = Fitness1(PrimaryPopulation113)
-#     kk = k.index((max(Fitness1(PrimaryPopulation113))))
-#     print(PrimaryPopulation113[kk])
-#     print(max(k))
-#     MAX13.append(max(k))
-#     AVG13.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents114 = TournomentSM1(PrimaryPopulation114)
-#     Children114 = Mating(Parents114)
-#     Muted114 = OneFivthSigmaMutation1(Children114)
-#     choosingNextGeneration114 = RouletteWheel1(Muted114)
-#     PrimaryPopulation114 = copy.deepcopy(choosingNextGeneration114)
-#     k = Fitness1(PrimaryPopulation114)
-#     kk = k.index((max(Fitness1(PrimaryPopulation114))))
-#     print(PrimaryPopulation114[kk])
-#     print(max(k))
-#     MAX14.append(max(k))
-#     AVG14.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents115 = RouletteWheel1(PrimaryPopulation115)
-#     Children115 = Mating(Parents115)
-#     Muted115 = OneFivthSigmaMutation1(Children115)
-#     choosingNextGeneration115 = SUS1(Muted115)
-#     PrimaryPopulation115 = copy.deepcopy(choosingNextGeneration115)
-#     k = Fitness1(PrimaryPopulation115)
-#     kk = k.index((max(Fitness1(PrimaryPopulation115))))
-#     print(PrimaryPopulation115[kk])
-#     print(max(k))
-#     MAX15.append(max(k))
-#     AVG15.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents116 = RouletteWheel1(PrimaryPopulation116)
-#     Children116 = Mating(Parents116)
-#     Muted116 = OneFivthSigmaMutation1(Children116)
-#     choosingNextGeneration116 = TournomentSM1(Muted116)
-#     PrimaryPopulation116 = copy.deepcopy(choosingNextGeneration116)
-#     k = Fitness1(PrimaryPopulation116)
-#     kk = k.index((max(Fitness1(PrimaryPopulation116))))
-#     print(PrimaryPopulation116[kk])
-#     print(max(k))
-#     MAX16.append(max(k))
-#     AVG16.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents117 = SUS1(PrimaryPopulation117)
-#     Children117 = Mating(Parents117)
-#     Muted117 = OneFivthSigmaMutation1(Children117)
-#     choosingNextGeneration117 = RouletteWheel1(Muted117)
-#     PrimaryPopulation117 = copy.deepcopy(choosingNextGeneration117)
-#     k = Fitness1(PrimaryPopulation117)
-#     kk = k.index((max(Fitness1(PrimaryPopulation117))))
-#     print(PrimaryPopulation117[kk])
-#     print(max(k))
-#     MAX17.append(max(k))
-#     AVG17.append(statistics.mean(k))
-#     print("----------------------------------------")
-#     ###################
-#     Parents118 = SUS1(PrimaryPopulation118)
-#     Children118 = Mating(Parents118)
-#     Muted118 = OneFivthSigmaMutation1(Children118)
-#     choosingNextGeneration118 = TournomentSM1(Muted118)
-#     PrimaryPopulation118 = copy.deepcopy(choosingNextGeneration118)
-#     k = Fitness1(PrimaryPopulation118)
-#     kk = k.index((max(Fitness1(PrimaryPopulation118))))
-#     print(PrimaryPopulation118[kk])
-#     print(max(k))
-#     MAX18.append(max(k))
-#     AVG18.append(statistics.mean(k))
-#     print("----------------------------------------")
-
 ####################################################### Main loop #####################################################
 def test1():
     MAX1 = []
@@ -869,6 +639,9 @@ def test1():
         MAX1.append(max(k))
         # AVG1.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count=count+1
     return MAX1
 def test2():
     MAX2 = []
@@ -887,6 +660,9 @@ def test2():
         MAX2.append(max(k))
         # AVG2.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX2
 def test3():
     MAX3 = []
@@ -905,6 +681,9 @@ def test3():
         MAX3.append(max(k))
         # AVG3.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX3
 def test4():
     MAX4 = []
@@ -923,6 +702,9 @@ def test4():
         MAX4.append(max(k))
         # AVG4.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX4
 def test5():
     MAX5 = []
@@ -941,6 +723,9 @@ def test5():
         MAX5.append(max(k))
         # AVG5.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX5
 def test6():
     MAX6 = []
@@ -959,6 +744,9 @@ def test6():
         MAX6.append(max(k))
         # AVG6.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX6
 def test7():
     MAX7 = []
@@ -977,6 +765,9 @@ def test7():
         MAX7.append(max(k))
         # AVG7.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX7
 def test8():
     MAX8 = []
@@ -995,6 +786,9 @@ def test8():
         MAX8.append(max(k))
         # AVG8.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX8
 def test9():
     MAX9 = []
@@ -1013,6 +807,9 @@ def test9():
         MAX9.append(max(k))
         # AVG9.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX9
 def test10():
     MAX10 = []
@@ -1031,6 +828,9 @@ def test10():
         MAX10.append(max(k))
         # AVG10.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX10
 def test11():
     MAX11 = []
@@ -1049,6 +849,9 @@ def test11():
         MAX11.append(max(k))
         # AVG11.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX11
 def test12():
     MAX12 = []
@@ -1067,6 +870,9 @@ def test12():
         MAX12.append(max(k))
         # AVG12.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX12
 def test13():
     MAX13 = []
@@ -1085,6 +891,9 @@ def test13():
         MAX13.append(max(k))
         # AVG13.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX13
 def test14():
     MAX14 = []
@@ -1103,6 +912,9 @@ def test14():
         MAX14.append(max(k))
         # AVG14.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX14
 def test15():
     MAX15 = []
@@ -1121,6 +933,9 @@ def test15():
         MAX15.append(max(k))
         # AVG15.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX15
 def test16():
     MAX16 = []
@@ -1139,6 +954,9 @@ def test16():
         MAX16.append(max(k))
         # AVG16.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX16
 def test17():
     MAX17 = []
@@ -1157,6 +975,9 @@ def test17():
         MAX17.append(max(k))
         # AVG17.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX17
 def test18():
     MAX18 = []
@@ -1175,6 +996,9 @@ def test18():
         MAX18.append(max(k))
         # AVG18.append(statistics.mean(k))
         # print("----------------------------------------")
+        global count
+        print(count)
+        count = count + 1
     return MAX18
 ####################################################### Main loop #####################################################
 def chartAndTime(MAX1, MAX2, MAX3, MAX4, MAX5, MAX6, MAX7, MAX8, MAX9, MAX10, MAX11, MAX12, MAX13, MAX14, MAX15, MAX16, MAX17, MAX18):
@@ -1258,52 +1082,40 @@ def main():
     MAX17 = p.apply(test17)
     MAX18 = p.apply(test18)
 
-    # p1.start()
-    # p2.start()
-    # p3.start()
-    # p4.start()
-    # p5.start()
-    # p6.start()
-    # p7.start()
-    # p8.start()
-    # p9.start()
-    # p10.start()
-    # p11.start()
-    # p12.start()
-    # p13.start()
-    # p14.start()
-    # p15.start()
-    # p16.start()
-    # p17.start()
-    # p18.start()
-    #
-    # p1.join()
-    # p2.join()
-    # p3.join()
-    # p4.join()
-    # p5.join()
-    # p6.join()
-    # p7.join()
-    # p8.join()
-    # p9.join()
-    # p10.join()
-    # p11.join()
-    # p12.join()
-    # p13.join()
-    # p14.join()
-    # p15.join()
-    # p16.join()
-    # p17.join()
-    # p18.join()
+# if __name__ == "__main__":
+#     start3 = time.time()
+#     main()
+#     end3 = time.time() - start3
+#     print(end1+end2+end3)
+#     chartAndTime(MAX1, MAX2,  MAX3, MAX4, MAX5,  MAX6,
+#                  MAX7, MAX8,  MAX9, MAX10,MAX11,MAX12,
+#                  MAX13,MAX14,MAX15, MAX16,MAX17,MAX18)
 
-if __name__ == "__main__":
-    start3 = time.time()
-    main()
-    end3 = time.time() - start3
-    print(end1+end2+end3)
-    chartAndTime(MAX1, MAX2,  MAX3,
-                 MAX4, MAX5,  MAX6,
-                 MAX7, MAX8,  MAX9,
-                 MAX10,MAX11,MAX12,
-                 MAX13,MAX14,MAX15,
-                 MAX16,MAX17,MAX18)
+start3 = time.time()
+MAX1 = test1()
+MAX2 = test2()
+MAX3 = test3()
+MAX4 = test4()
+MAX5 = test5()
+MAX6 = test6()
+MAX7 = test7()
+MAX8 = test8()
+MAX9 = test9()
+MAX10 = test10()
+MAX11 = test11()
+MAX12 = test12()
+MAX13 = test13()
+MAX14 = test14()
+MAX15 = test15()
+MAX16 = test16()
+MAX17 = test17()
+MAX18 = test18()
+end3 = time.time() - start3
+print(end1+end2+end3)
+chartAndTime(MAX1, MAX2,  MAX3,
+              MAX4, MAX5,  MAX6,
+              MAX7, MAX8,  MAX9,
+              MAX10,MAX11,MAX12,
+              MAX13,MAX14,MAX15,
+              MAX16,MAX17,MAX18)
+
